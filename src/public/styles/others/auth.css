@@ -1,0 +1,109 @@
+.auth-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.auth-decor {
+    background: linear-gradient(359deg, #03034b 22.04%, #3822e1 232.48%);
+    position: relative;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.auth-shapes {
+    position: absolute;
+    bottom: 0;
+    inset-inline: 0;
+}
+
+.auth-decor img {
+    max-width: 80%;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.auth-form-container {
+    display: block;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    max-width: 280px;
+    margin: auto;
+    /* padding: 20 20 20 20; */
+}
+
+.auth-title {
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: -0.225px;
+    margin-bottom: 26px;
+}
+
+.form-group {
+    margin-bottom: 32px;
+}
+
+.register-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.alt-btn {
+    justify-content: center;
+    text-align: center;
+    background-color: #bbbbbb;
+    color: white;
+    max-width: 280px;
+}
+
+.btn {
+    width: 100%;
+    margin-top: 32px;
+}
+
+form {
+    width: 100%;
+}
+
+i p {
+    padding-left: 5px;
+    font-size: smaller;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+    color: red;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 768px) {
+
+    .auth-container {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    
+    .auth-decor {
+        display: none;
+    }
+
+    .auth-form-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin: auto;
+    }
+}

@@ -1,0 +1,28 @@
+.list-container {
+    max-width: 1024px;
+    margin: 0 auto;
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 32px 5vw 28px 5vw;
+    /* margin-top: 32px;
+    margin-bottom: 28px; */
+}
+
+.list-header h1 {
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 11px;
+}

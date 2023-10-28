@@ -1,0 +1,26 @@
+version: "3.3"
+services:
+    web:
+        image: tubes-1:latest
+        ports:
+            - 8080:80
+        hostname: web
+        env_file:
+            - .env
+        volumes:
+            - ./src:/var/www/html
+
+    database:
+        image: mysql:latest
+        ports:
+            - 3308:3306
+        hostname: database
+        env_file:
+            - .env
+        volumes:
+            - ./mysql:/var/lib/mysql
+            - ./init:/docker-entrypoint-initdb.d
+
+networks:
+    web-database:
+        driver: bridge

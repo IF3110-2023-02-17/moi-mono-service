@@ -1,0 +1,79 @@
+.director-container {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    /* display: flex;
+    width: 100%;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+    max-width: 1024px;
+    margin: 0 auto; */
+}
+
+.director-card {
+    width: 20vw;
+    /* flex-grow: 1; */
+    flex-basis: 17vw;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.director-header {
+    margin: auto;
+    display: flex;
+    width: 100%;
+}
+
+.director-thumbnail {
+    margin: auto;
+    display: flex;
+}
+
+.director-img {
+    /* width: 200px; */
+    max-width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    margin: auto;
+    transition: all 0.2s ease-in-out;
+}
+
+.director-img:hover {
+    transform: scale(1.05);
+}
+
+.title {
+    margin: auto;
+    padding-left: 0.5vh;
+    padding-right: 0.5vh;
+    text-align: center;
+}
+
+/* .title {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+} */
+
+.card-delete-btn {
+    background-color: var(--alert);
+    margin: auto;
+    width: 80%;
+}
+
+@media (max-width: 900px) {
+    .director-card {
+        flex-basis: 30vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .director-card {
+        flex-basis: 70vw;
+    }
+}
