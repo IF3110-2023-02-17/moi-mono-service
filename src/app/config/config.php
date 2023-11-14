@@ -5,6 +5,8 @@ define ('PORT', $_ENV['MYSQL_PORT']);
 define ('USER', $_ENV['MYSQL_WBD_USER']);
 define ('DB_NAME', $_ENV['MYSQL_DATABASE']);
 define ('PASSWORD', $_ENV['MYSQL_ROOT_PASSWORD']);
+define ('SOAP_API_KEY', $_ENV['SOAP_API_KEY']);
+define ('SOAP_API_URL', $_ENV['SOAP_API_URL']);
 define ('STORAGE_URL', '/media');
 
 define ('LIMIT_PAGE', 10);

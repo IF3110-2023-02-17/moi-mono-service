@@ -17,4 +17,9 @@ class Utils
         require_once __DIR__ . "/../models/$model.php";
         return new $model();
     }
+    public static function client($client)
+    {
+        require_once __DIR__ . "/../clients/$client.php";
+        return new $client();
+    }
 }
