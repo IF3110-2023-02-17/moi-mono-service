@@ -11,7 +11,7 @@ class UserController
                     $auth = Utils::middleware("Authentication");
                     try {
                         $auth->isUserLogin();
-                        header("Location: http://localhost:8080/home");
+                        header("Location: http://localhost:8001/home");
                     } catch (Exception $e) {
                         if ($e->getCode() !== STATUS_UNAUTHORIZED) {
                             throw new Exception($e->getMessage(), $e->getCode());
@@ -32,7 +32,7 @@ class UserController
 
                     header('Content-Type: application/json');
                     http_response_code(201);
-                    echo json_encode(['redirect' => "http://localhost:8080/home"]);
+                    echo json_encode(['redirect' => "http://localhost:8001/home"]);
                     exit;
                     break;
                 default:
@@ -52,7 +52,7 @@ class UserController
                     $auth = Utils::middleware("Authentication");
                     try {
                         $auth->isUserLogin();
-                        header("Location: http://localhost:8080/home");
+                        header("Location: http://localhost:8001/home");
                     } catch (Exception $e) {
                         if ($e->getCode() !== STATUS_UNAUTHORIZED) {
                             throw new Exception($e->getMessage(), $e->getCode());
@@ -70,7 +70,7 @@ class UserController
 
                     header('Content-Type: application/json');
                     http_response_code(201);
-                    echo json_encode(['redirect' => "http://localhost:8080/user/login"]);
+                    echo json_encode(['redirect' => "http://localhost:8001/user/login"]);
                     exit;
                     break;
                 default:
@@ -90,7 +90,7 @@ class UserController
                     $data['isLogin'] = false;
                     // header('Content-Type: application/json');
                     // http_response_code(STATUS_OK);
-                    header("Location: http://localhost:8080/home");
+                    header("Location: http://localhost:8001/home");
                     exit;
                     break;
                 default:
@@ -116,7 +116,7 @@ class UserController
             }
         } catch (Exception $e) {
             if ($e->getCode() === STATUS_UNAUTHORIZED) {
-                header("Location: http://localhost:8080/user/login");
+                header("Location: http://localhost:8001/user/login");
             } else {
                 http_response_code($e->getCode());
             }

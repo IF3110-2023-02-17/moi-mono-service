@@ -1,0 +1,32 @@
+.studio-post-container {
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: center;
+}
+
+.post-img {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(255, 255, 255, 0.19);
+}
+
+.pagination-group-post {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page-part-post {
+    margin: 15px;
+}
+
+.page-button-post {
+    padding: 8px;
+}
+
+.page-text-post {
+    margin: auto;
+    color: var(--black);
+    font-size: large;
+}

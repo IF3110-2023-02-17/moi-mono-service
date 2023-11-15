@@ -136,5 +136,5 @@ const deleteReviewCard = (id) => {
 
 const editReviewCard = (id) => {
     console.log("edit");
-    location.replace(`http://localhost:8080/review/update?review_id=${id}`);
+    location.replace(`http://localhost:8001/review/update?review_id=${id}`);
 };

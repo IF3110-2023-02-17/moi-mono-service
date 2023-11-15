@@ -1,0 +1,36 @@
+.studio-movie-container {
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: center;
+}
+
+.movie-header {
+    color: var(--white);
+}
+
+.movie-img {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(255, 255, 255, 0.19);
+}
+
+.pagination-group-movie {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page-part-movie {
+    margin: 15px;
+}
+
+.page-button-movie {
+    padding: 8px;
+}
+
+.page-text-movie {
+    margin: auto;
+    color: var(--white);
+    font-size: large;
+}

@@ -42,7 +42,7 @@ class ReviewController {
             }
         } catch (Exception $e) {
             if ($e->getCode() === STATUS_UNAUTHORIZED) {
-                header("Location: http://localhost:8080/user/login");
+                header("Location: http://localhost:8001/user/login");
             } else {
                 http_response_code($e->getCode());
             }
@@ -107,7 +107,7 @@ class ReviewController {
             }
         } catch (Exception $e) {
             if ($e->getCode() === STATUS_UNAUTHORIZED) {
-                header("Location: http://localhost:8080/user/login");
+                header("Location: http://localhost:8001/user/login");
             } else {
                 http_response_code($e->getCode());
             }
@@ -149,7 +149,7 @@ class ReviewController {
             }
         } catch (Exception $e) {
             if ($e->getCode() === STATUS_UNAUTHORIZED) {
-                header("Location: http://localhost:8080/user/login");
+                header("Location: http://localhost:8001/user/login");
             } else {
                 http_response_code($e->getCode());
             }
@@ -195,7 +195,7 @@ class ReviewController {
             }
         } catch (Exception $e) {
             if ($e->getCode() === STATUS_UNAUTHORIZED) {
-                header("Location: http://localhost:8080/user/login");
+                header("Location: http://localhost:8001/user/login");
             } else {
                 http_response_code($e->getCode());
             }

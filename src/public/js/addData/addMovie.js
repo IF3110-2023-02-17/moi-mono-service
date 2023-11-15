@@ -390,7 +390,7 @@ discardBtn &&
     discardBtn.addEventListener("click", (e) => {
         e.preventDefault();
 
-        location.replace(`http://localhost:8080/movie/catalog/1`);
+        location.replace(`http://localhost:8001/movie/catalog/1`);
     });
 
 confirmBtn &&
@@ -448,7 +448,7 @@ confirmBtn &&
                 data = JSON.parse(this.responseText);
 
                 if (!data.error && this.status == 200) {
-                    location.replace("http://localhost:8080/movie/catalog/1");
+                    location.replace("http://localhost:8001/movie/catalog/1");
                 }
             }
         };

@@ -20,8 +20,7 @@
             <ul >
                 <li><a href="/movie/search">Search</a></li>
                 <li><a href="/review">Review</a></li>
-                <!-- <li><a href="/user/login">Login</a></li>
-                <li><a href="/user/register">Register</a></li> -->
+
                 <?php if($this->data['isLogin']) : ?>
                     <li><a href="/user/logout">Logout</a></li>
                 <?php else: ?>
