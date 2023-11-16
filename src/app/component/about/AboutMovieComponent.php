@@ -17,7 +17,7 @@
        
         <img id="movie-background" src="../../../public/media/img/movie/<?= $this->data['movie']['img_path'] ?>" alt="<?= $this->data['movie']['title'] ?>">
         <?php if ($this->data["isAdmin"]) : ?>
-            <button id="updateContentButton"> <a href="http://localhost:8080/movie/update?movie_id=<?= $this->data['movie']['movie_id'] ?>">EDIT</a></button>
+            <button id="updateContentButton"> <a href="http://localhost:8001/movie/update?movie_id=<?= $this->data['movie']['movie_id'] ?>">EDIT</a></button>
         <?php endif; ?>
         <h2 id="about-movie" class="text">
             about Movie,
@@ -68,7 +68,7 @@
         </h2>
         <?php if(!$this->data["isAdmin"]) : ?>
             <button id="addReviewButton">
-                <a href="http://localhost:8080/review/insert?movie_id=<?= $this->data['movie']['movie_id'] ?>">Add Review</a>
+                <a href="http://localhost:8001/review/insert?movie_id=<?= $this->data['movie']['movie_id'] ?>">Add Review</a>
             </button>
         <? endif; ?>
         <div class="row">

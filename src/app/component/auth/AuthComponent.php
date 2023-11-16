@@ -9,9 +9,9 @@
     <link rel="stylesheet" type="text/css" href="/styles/others/auth.css">
     <script type="text/javascript" src="/js/others/debounce.js" defer></script>
     <?php if ($this->data["isLogin"]) : ?>
-        <script type="text/javascript" src="http://localhost:8080/public/js/auth/login.js" defer></script>
+        <script type="text/javascript" src="http://localhost:8001/public/js/auth/login.js" defer></script>
     <?php else : ?>
-        <script type="text/javascript" src="http://localhost:8080/public/js/auth/register.js" defer></script>
+        <script type="text/javascript" src="http://localhost:8001/public/js/auth/register.js" defer></script>
     <?php endif; ?>
 </head>
 

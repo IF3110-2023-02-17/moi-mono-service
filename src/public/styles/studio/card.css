@@ -1,0 +1,75 @@
+.studio-card {
+    width: 30%;
+    min-height: 20vh;
+    margin: 10px;
+    background-color: var(--midnight-blue);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+
+.studio-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.studio-name-wrap {
+    margin: auto;
+    text-align: center;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.studio-description-wrap {
+    margin: auto;
+    text-align: center;
+    margin: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    color: var(--white);
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.studio-panel {
+    display: flex;
+    justify-content: center;
+}
+
+#studio-btn {
+    margin: auto;
+    width: 110px;
+}
+
+.unsubs-btn {
+    color: var(--white);
+    background-color: var(--alert);
+}
+
+.subs-btn {
+    color: var(--white);
+    background-color: var(--purple);
+    border: 1px solid #cbd5e1;
+}
+
+.pending-btn {
+    color: var(--purple);
+    background-color: var(--yellow);
+}
+
+.reject-btn {
+    color: var(--white);
+    background-color: var(--alert);
+}
+
+.title {
+    text-decoration: none;
+}

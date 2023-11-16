@@ -1,6 +1,6 @@
 <?php
 
-class StudioView {
+class StudiosView {
     public function __construct($data = [])
     {
         $this->data = $data;
@@ -8,6 +8,6 @@ class StudioView {
 
     public function render(): void
     {
-        require_once __DIR__ . "/../../component/studio/StudioPage.php";
+        require_once __DIR__ . "/../../component/studio/StudiosCatalogPage.php";
     }
 }

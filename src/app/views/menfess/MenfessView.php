@@ -1,7 +1,6 @@
 <?php
 
-class MenfessView
-{
+class MenfessView {
     public function __construct($data = [])
     {
         $this->data = $data;
@@ -9,6 +8,6 @@ class MenfessView
 
     public function render(): void
     {
-        require_once __DIR__ . "/../../component/menfess/MenfessComponent.php";
+        require_once __DIR__ . "/../../component/menfess/MenfessPage.php";
     }
 }

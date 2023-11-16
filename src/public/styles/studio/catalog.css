@@ -1,0 +1,29 @@
+.studio {
+    display: flex;
+}
+
+.studio-header {
+    margin: 5vh;
+}
+
+.studio-section {
+    margin: 1vh;
+    display: flex;
+    flex-direction: column;
+}
+.studio-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media (max-width: 750px) {
+    .studio-card {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        min-width: 80%;
+    }
+}

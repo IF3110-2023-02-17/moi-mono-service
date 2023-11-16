@@ -1,22 +1,17 @@
 <?php
 
-class MenfessController 
+class PhpinfoController 
 {
-    public function index($studio_id) 
+    public function index() 
     {
         try 
         {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
-                    $data['isLogin'] = true;
 
                     // handle access
-                    
-                    $data['studio_name'] = 'Disney Studio';
+                    phpinfo();
 
-                    $studio = Utils::view("menfess", "MenfessView", $data);
-                    $studio->render();
-                    
                     break;
                 default:
                     throw new Exception('Method Not Allowed', STATUS_METHOD_NOT_ALLOWED);
@@ -31,23 +26,28 @@ class MenfessController
             }
         }    
     }
-
-    public function send($id)
+    public function test() 
     {
-        try
+        try 
         {
             switch ($_SERVER['REQUEST_METHOD']) {
-                case 'POST':
-                    $data['isLogin'] = true;
+                case 'GET':
 
-                    // handle access
+                    $client = Utils::client("SoapServiceClient");
 
-                    
+                    $result = $client->invoke("getSubscriptionStudio", "Subscription", 
+                    [
+                        "studioID" => 1,
+                    ]);
+
+                    header("Content-Type: application/json");
+                    echo json_encode($result);
+
                     break;
                 default:
                     throw new Exception('Method Not Allowed', STATUS_METHOD_NOT_ALLOWED);
             } 
-        }
+        } 
         catch (Exception $e) 
         {
             if ($e->getCode() === STATUS_UNAUTHORIZED) {
@@ -57,4 +57,19 @@ class MenfessController
             }
         }    
     }
+    public function arrayToXml($array, &$xml){
+        foreach ($array as $key => $value) {
+            if(is_int($key)){
+                $key = "e";
+            }
+            if(is_array($value)){
+                $label = $xml->addChild($key);
+                $this->arrayToXml($value, $label);
+            }
+            else {
+                $xml->addChild($key, $value);
+            }
+        }
+    }
+    
 }

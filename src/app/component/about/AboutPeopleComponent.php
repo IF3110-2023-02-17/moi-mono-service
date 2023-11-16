@@ -22,10 +22,10 @@
         <?php if ($this->data["isAdmin"]) : ?>
             <button id="updateContentButton">
                 <?php if($this->data['title'] == 'Director') : ?>
-                <a href="http://localhost:8080/director/update?director_id=<?= $this->data['people']['director_id'] ?>">Edit</a>
+                <a href="http://localhost:8001/director/update?director_id=<?= $this->data['people']['director_id'] ?>">Edit</a>
 
                 <?php elseif($this->data['title'] == 'Actor') : ?>
-                    <a href="http://localhost:8080/actor/update?actor_id=<?= $this->data['people']['actor_id'] ?>">Edit</a>
+                    <a href="http://localhost:8001/actor/update?actor_id=<?= $this->data['people']['actor_id'] ?>">Edit</a>
                 
                 <?php endif; ?>
             </button>

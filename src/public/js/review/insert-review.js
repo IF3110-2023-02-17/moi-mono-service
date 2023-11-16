@@ -23,7 +23,7 @@ rateInput &&
 
 discardBtn &&
     discardBtn.addEventListener("click", () => {
-        location.replace(`http://localhost:8080/review/index/1`);
+        location.replace(`http://localhost:8001/review/index/1`);
     });
 
 cancelBtn &&
@@ -68,7 +68,7 @@ confirmBtn &&
                 data = JSON.parse(this.responseText);
 
                 if (!data.error && this.status == 200) {
-                    location.replace("http://localhost:8080/review/index/1");
+                    location.replace("http://localhost:8001/review/index/1");
                 }
             }
         };
