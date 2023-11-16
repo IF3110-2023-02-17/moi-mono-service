@@ -11,7 +11,7 @@ class MenfessController
                     $data['isLogin'] = true;
 
                     // handle access
-
+                    
                     $data['studio_name'] = 'Disney Studio';
 
                     $studio = Utils::view("menfess", "MenfessView", $data);

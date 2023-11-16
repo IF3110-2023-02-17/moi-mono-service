@@ -6,24 +6,28 @@
 
 <div class="studio-post-container">
     <?php foreach ($posts as $index => $post) : ?>
+        <!-- <?php 
+            // echo $post->title;
+
+        ?> -->
         <div class="post-card">
-            <a class="post-card-wrap" href="/post/<?= $post['post_id'] ?>">
+            <a class="post-card-wrap" href="/post/<?= $post->post_id ?>">
                 <div class="post-img-wrap">
-                    <img class="post-img" src="<?= STORAGE_URL ?>/img/post/<?= $post["img_path"] ?>" alt="<?= $post["title"] ?>" />
+                    <img class="post-img" src="<?= STORAGE_URL ?>/img/post/<?= $post->img_path ?>" alt="<?= $post->title ?>" />
                 </div>
                 <div class="post-detail-wrap">
                     <div class="post-detail-title">
-                        <h4 class="title"><?= $post["title"] ?></p>
+                        <h4 class="title"><?= $post->title ?></p>
                     </div>
                     <div class="post-detail-body">
-                        <?php if(strlen($post['body']) < 300) : ?>
-                            <p class="body"><?= $post['body'] ?></p>
+                        <?php if(strlen($post->body) < 300) : ?>
+                            <p class="body"><?= $post->body ?></p>
                         <?php else : ?>
-                            <p class="body"><?= substr($post['body'], 0, 277) ?>...</p>
+                            <p class="body"><?= substr($post->body, 0, 277) ?>...</p>
                         <?php endif; ?>
                     </div>
                     <div class="post-detail-date">
-                        <p class="date"><?= $post['updated_at'] ?></p>
+                        <p class="date"><?= $post->updated_at ?></p>
                     </div>
                 </div>    
             </a>

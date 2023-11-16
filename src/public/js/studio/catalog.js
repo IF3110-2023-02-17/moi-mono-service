@@ -32,6 +32,10 @@ prevPage &&
         }
 
         currPage--;
+        if (currPage == 0) {
+            return;
+        }
+
         const xhr = new XMLHttpRequest();
 
         xhr.open("GET", `/studio/fetch/${currPage}`);
@@ -52,6 +56,11 @@ nextPage &&
         }
 
         currPage++;
+
+        if (currPage > totalPage) {
+            return;
+        }
+
         const xhr = new XMLHttpRequest();
 
         xhr.open("GET", `/studio/fetch/${currPage}`);
@@ -67,9 +76,11 @@ nextPage &&
     });
 
 const updateComponentResult = (data) => {
-    let resultHMTL = `<head>
-        <link rel="stylesheet" type="text/css" href="/styles/studio/card.css">
-    </head>`;
+    let resultHMTL = `
+        <head>
+            <link rel="stylesheet" type="text/css" href="/styles/studio/card.css">
+        </head>
+        `;
 
     for (let studio of data.studio.values()) {
         let button = ``;
@@ -77,9 +88,9 @@ const updateComponentResult = (data) => {
         if (studio.accept) {
             button = `<button id="studio-btn" class="btn unsubs-btn" onclick="unsubscribe(${studio.studio_id})" data="${studio.studio_id}">Unsubscribe</button>`;
         } else if (studio.pending) {
-            button = `<button id="studio-btn" class="btn reject-btn" onclick="resubscribe(${studio.studio_id})" data="${studio.studio_id}">Reject</button>`;
-        } else if (studio.reject) {
             button = `<button id="studio-btn" class="btn pending-btn" data="${studio.studio_id}" disabled>Pending</button>`;
+        } else if (studio.reject) {
+            button = `<button id="studio-btn" class="btn reject-btn" onclick="resubscribe(${studio.studio_id})" data="${studio.studio_id}">Reject</button>`;
         } else {
             button = `<button id="studio-btn" class="btn subs-btn" onclick="subscribe(${studio.studio_id})" data="${studio.studio_id}">Subscribe</button>`;
         }
@@ -104,7 +115,7 @@ const updateComponentResult = (data) => {
     }
 
     resultContainer.innerHTML = resultHMTL;
-    pageText.innerHTML = `Page <span id="page-number">${currPage}</span> of ${data.countPage}`;
+    pageText.innerHTML = `Page <span id="page-number">${currPage}</span> of ${totalPage}`;
     if (currPage != 1) {
         prevPage.disabled = false;
     } else {
@@ -118,4 +129,26 @@ const updateComponentResult = (data) => {
     }
 
     window.history.pushState(null, document.title, `http://localhost:8001/studio/${currPage}`);
+};
+
+const subscribe = (studio_id) => {
+    if (!studio_id) {
+        return;
+    }
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("POST", `/studio/subscribe/${studio_id}`);
+
+    xhr.send();
+
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            console.log(this.responseText);
+            data = JSON.parse(this.responseText);
+            if (data.status_code) {
+                location.replace(`http://localhost:8001/studio/${currPage}`);
+            }
+        }
+    };
 };

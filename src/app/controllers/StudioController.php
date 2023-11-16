@@ -6,24 +6,23 @@ class StudioController
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
+
+                    $auth = Utils::middleware("Authentication");
+                    $auth->isUserLogin();
+                    
+                    $user_id = $_SESSION['user_id'];
+
                     $data['isLogin'] = true;
 
-                    // get data with page 
-                    $data['studio'] = [
-                        ["studio_id" => 1, "name" => "Rizky Studio" , "accept" => true, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 2, "name" => "Abdillah Studio" , "accept" => false, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 3, "name" => "Rasyid Studio" , "accept" => false, "pending" => false, "reject" => true, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 4, "name" => "Golang Studio" , "accept" => false, "pending" => true, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 5, "name" => "Java Studio" , "accept" => false, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 6, "name" => "Rizky Studio" , "accept" => true, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 7, "name" => "Abdillah Studio" , "accept" => false, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 8, "name" => "Rasyid Studio" , "accept" => false, "pending" => false, "reject" => true, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 9, "name" => "Golang Studio" , "accept" => false, "pending" => true, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                    ];
+                    $count = true;
+                    $rest = Utils::client("RestServiceClient"); 
+                    $result = $rest->get("/studio/$user_id/$page?count=$count", null);
+                    
+                    $data['studio'] = json_decode($result['result'])->studios;
 
-                    // count pages
-                    $data['countPage'] = 2;
-                    $data['currPage'] = $page;
+
+                    $data['countPage'] = json_decode($result['result'])->count;
+                    $data['currPage'] = json_decode($result['result'])->page;
 
                     $studio = Utils::view("studio", "StudiosView", $data);
                     $studio->render();
@@ -40,26 +39,21 @@ class StudioController
             }
         }
     }
-
     public function fetch($page) {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
 
-                    $data['studio'] = [
-                        ["studio_id" => 1, "name" => "Andrea Studio" , "accept" => true, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 2, "name" => "Akido Studio" , "accept" => false, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 3, "name" => "Yagami Studio" , "accept" => false, "pending" => false, "reject" => true, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 4, "name" => "Golang Studio" , "accept" => false, "pending" => true, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 5, "name" => "Java Studio" , "accept" => false, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 6, "name" => "Rizky Studio" , "accept" => true, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 7, "name" => "Abdillah Studio" , "accept" => false, "pending" => false, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 8, "name" => "Rasyid Studio" , "accept" => false, "pending" => false, "reject" => true, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                        ["studio_id" => 9, "name" => "Golang Studio" , "accept" => false, "pending" => true, "reject" => false, "description" => "Deskripsi ini merupakan deskripsi film itu dengan film yang terkenal adalah makan-makan" ],
-                    ];
+                    $auth = Utils::middleware("Authentication");
+                    $auth->isUserLogin();
+                    
+                    $user_id = $_SESSION['user_id'];
 
-                    $data['countPage'] = 2;
-                    $data['currPage'] = $page;
+                    $rest = Utils::client("RestServiceClient"); 
+                    $result = $rest->get("/studio/$user_id/$page", null);
+                    
+                    $data['studio'] = json_decode($result['result'])->studios;
+                    $data['currPage'] = json_decode($result['result'])->page;
 
                     header('Content-Type: application/json');
                     http_response_code(200);
@@ -77,11 +71,16 @@ class StudioController
             }
         }
     }
-    
     public function dashboard($id = 1) {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
+                    $auth = Utils::middleware("Authentication");
+                    $auth->isUserLogin();
+
+                    $prem = Utils::middleware("SubscriptionAuth");
+                    $prem->isSubscribeAccept($id);
+
                     $data['isLogin'] = true;
 
                     if (isset($_GET['movie_page'])) {
@@ -96,73 +95,22 @@ class StudioController
                         $post_page = 1;
                     }
 
+                    $count = true;
+
                     $movie = Utils::model("Movie");
-                    $movies = $movie->getPaginate($movie_page);
-                    $data['movies'] = array_slice($movies, 5);
-                    $data['movie_count'] = $movie->getCountAll();
+                    $data['movies'] = $movie->getMovieByStudio((int)$id, $movie_page);
+                    $data['movie_count'] = $movie->getPageMovieByStudio((int)$id);
                     $data['movie_page'] = $movie_page;
                     
-                    $post = [
-                        ["post_id" => 1, "title" => "Konten Menarik Nih Konten", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                        ["post_id" => 2, "title" => "Konten Kurang Nih Konten", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                        ["post_id" => 3, "title" => "Ada Leak Volem Baru", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                        ["post_id" => 4, "title" => "Konten Volem Krennnn", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                    ];
-
-                    $data['posts'] = $post;
-                    $data['post_count'] = 2;
-                    $data['post_page'] = $post_page;
+                    $rest = Utils::client("RestServiceClient"); 
+                    $result = $rest->get("/posts/$id/$post_page?count=$count", null);
+                    
+                    $data['posts'] = json_decode($result['result'])->posts;
+                    $data['post_count'] = json_decode($result['result'])->count;
+                    $data['post_page'] = json_decode($result['result'])->page;
                     
                     $data['studio_id'] = $id;
-                    $data['studio_name'] = "Disney Studio";
+                    $data['studio_name'] = json_decode($result['result'])->name;
 
                     $studio = Utils::view("studio", "StudioView", $data);
                     $studio->render();
@@ -196,12 +144,12 @@ class StudioController
                     } else {
                         $post_page = 1;
                     }
+
                     $movie = Utils::model("Movie");
-                    $movies = $movie->getPaginate($movie_page);
-                    $data['movies'] = array_slice($movies, 5);
+                    $data['movies'] = $movie->getMovieByStudio($id, $movie_page);
                     $data['movie_count'] = $movie->getCountAll();
                     $data['movie_page'] = $movie_page;
-
+                    
                     header('Content-Type: application/json');
                     http_response_code(200);
                     echo json_encode($data);
@@ -235,68 +183,54 @@ class StudioController
                     } else {
                         $post_page = 1;
                     }
-                    $post = [
-                        ["post_id" => 1, "title" => "Post Menarik Nih Konten", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                        ["post_id" => 2, "title" => "Post Kurang Nih Konten", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                        ["post_id" => 3, "title" => "Ada Leak PostVolem Baru", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                        ["post_id" => 4, "title" => "Konten Volem PostKrennnn", 
-                        "body" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Integer enim est, tempus sit amet malesuada eu, eleifend consectetur 
-                        metus. Sed a nulla eu ex condimentum lacinia. Suspendisse potenti. 
-                        Vivamus pulvinar rhoncus eros. Integer sagittis, erat sed cursus 
-                        dapibus, lorem nunc elementum erat, ut venenatis diam nibh in libero. 
-                        Quisque orci leo, feugiat ac ultricies hendrerit, congue vitae ipsum. 
-                        Proin in erat quam. Vestibulum ullamcorper hendrerit lectus, non 
-                        scelerisque dui tempor sed. Donec et nisl rutrum, dignissim turpis 
-                        quis, ullamcorper nunc. Integer a turpis tristique, efficitur nisi 
-                        nec, malesuada orci",
-                        "updated_at" => "2023-11-13 19:14:36", "img_path" => "Abang2an.png"],
-                        // =======
-                    ];
+                    
+                    $count = false;
 
-                    $data['posts'] = $post;
-                    $data['post_count'] = 2;
-                    $data['post_page'] = $post_page;
+                    $rest = Utils::client("RestServiceClient"); 
+                    $result = $rest->get("/posts/$id/$post_page?count=$count", null);
+                    
+                    $data['posts'] = json_decode($result['result'])->posts;
+                    $data['post_count'] = json_decode($result['result'])->count;
+                    $data['post_page'] = json_decode($result['result'])->page;
 
                     header('Content-Type: application/json');
                     http_response_code(200);
                     echo json_encode($data);
+                    
+                    break;
+                default:
+                    throw new Exception('Method Not Allowed', STATUS_METHOD_NOT_ALLOWED);
+            }
+        } catch (Exception $e) {
+            if ($e->getCode() === STATUS_UNAUTHORIZED) {
+                header("Location: http://localhost:8001/user/login");
+            } else {
+                http_response_code($e->getCode());
+            }
+        }
+    }
+    public function subscribe($id) {
+        try {
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'POST':
+
+                    $auth = Utils::middleware("Authentication");
+                    $auth->isUserLogin();
+                    
+                    $user_id = $_SESSION['user_id'];
+                    // $user_id = 3;
+
+                    $soap_client = Utils::client("SoapServiceClient");
+                    $result = $soap_client->invoke("subscribe", "Subscription", [ "studioID" => $id, "subscriberID" => $user_id]);
+                    
+                    $subs = $result["result"];
+
+                    $subscription = Utils::model("Subscription");
+                    $subscription->insertSubs($subs["studioId"], $subs["subsId"], $subs["status"]);
+
+                    header('Content-Type: application/json');
+                    http_response_code(200);
+                    echo json_encode($result);
                     
                     break;
                 default:

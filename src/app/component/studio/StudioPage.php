@@ -27,7 +27,7 @@
             <div class="studio-movie-header">
                 <h1><?= $this->data['studio_name']; ?></h1>
                 <div class="btn-wrap">
-                    <a href="/studio/menfess" class="btn btn-primary">Kirim Menfess</a>
+                    <a href="/menfess/<?= $this->data['studio_id'] ?>" class="btn btn-primary">Kirim Menfess</a>
                 </div>
             </div>
             <div class="studio-movie-wrap">
@@ -47,6 +47,7 @@
                     'post_count' => $this->data['post_count'],
                     'post_page' => $this->data['post_page'],
                 ]); 
+                // var_dump($posts);
                 include(dirname(__DIR__) . '/studio/component/StudioPostComponent.php') 
                 ?>
             </div>

@@ -24,7 +24,7 @@
     <section class="studio-section">                
         <div class="studio-container">
             <?php foreach ($this->data['studio'] as $index => $studio) : ?>
-                <?php extract([ 'studio' => $studio]); 
+                <?php extract([ 'studio' => $studio]);
                 include(dirname(__DIR__) . '/studio/StudioCardComponent.php') 
                 ?>
             <?php endforeach; ?>

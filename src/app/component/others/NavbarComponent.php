@@ -18,6 +18,7 @@
         </a>
         <div class="navbar-links">
             <ul >
+                <li><a href="/studio/1">Studio</a></li>
                 <li><a href="/movie/search">Search</a></li>
                 <li><a href="/review">Review</a></li>
 

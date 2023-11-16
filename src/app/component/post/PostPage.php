@@ -16,14 +16,14 @@
     <?php include(dirname(__DIR__) . '/others/NavbarComponent.php') ?>
     <div class="post-container">
         <div class="post-header" style='background-image: url("/media/img/post/Abang2an.png");'>
-            <h2 class="post-title"><?= $post['title'] ?></h2>
+            <h2 class="post-title"><?= $post->title ?></h2>
         </div>
         <div class="post-content">
             <div class="post-date">
-                <h4><?= $post['updated_at'] ?></h4>
+                <h4><?= $post->updated_at ?></h4>
             </div>
             <div class="post-body">
-                <p><?= $post['body'] ?></p>
+                <p><?= $post->body ?></p>
             </div>
         </div>
     </div>

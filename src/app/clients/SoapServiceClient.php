@@ -2,10 +2,6 @@
 
 class SoapServiceClient 
 {
-    private $wsdl;
-    private $headers;
-    private $post;
-
     public function invoke($endpoint, $namespace, $params) {
         try {
             $client = curl_init();

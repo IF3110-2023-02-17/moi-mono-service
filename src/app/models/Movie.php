@@ -397,4 +397,24 @@ class Movie {
 
         return $videoName;
     }
+
+    public function getMovieByStudio($studio_id, $page = 1) {
+        // echo $studio_id;
+        $sql = "SELECT * FROM movie WHERE studio_id = :studio_id LIMIT :limit OFFSET :offset";
+        $this->db->query($sql);
+        $this->db->bind("studio_id", (int) $studio_id);
+        $this->db->bind('limit', 5);
+        $this->db->bind('offset', ($page - 1) * 5);
+        
+        return $this->db->resultSet();
+    }
+    public function getPageMovieByStudio($studio_id) {
+        // echo $studio_id;
+        $sql = "SELECT COUNT(*) count FROM movie WHERE studio_id = :studio_id ";
+        $this->db->query($sql);
+        $this->db->bind("studio_id", (int) $studio_id);
+        
+        $count = $this->db->single();
+        return ceil($count['count']/5);
+    }
 }
