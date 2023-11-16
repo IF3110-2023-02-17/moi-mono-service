@@ -8,7 +8,7 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean \
     && apt-get update \
     && apt install libxml2-dev -y 
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql soap
+RUN docker-php-ext-install mysqli pdo pdo_mysql xml soap
 
 COPY ./src/public/php.ini /usr/local/etc/php/conf.d/init.ini
 
