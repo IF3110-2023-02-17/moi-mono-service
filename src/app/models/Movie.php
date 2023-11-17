@@ -1,6 +1,7 @@
 <?php
 
-class Movie {
+class Movie
+{
     private $db;
 
     public function __construct()
@@ -14,21 +15,23 @@ class Movie {
         return $this->db->resultSet();
     }
 
-    public function getTopMovies() {
+    public function getTopMovies()
+    {
         $sql = 'SELECT * FROM movie LIMIT 5';
         $this->db->query($sql);
 
         return $this->db->resultSet();
     }
 
-    public function getPaginate($page = 1){
+    public function getPaginate($page = 1)
+    {
         $sql = 'SELECT * FROM movie';
         $sql .= " LIMIT :limit OFFSET :offset";
 
         $this->db->query($sql);
         $this->db->bind('limit', LIMIT_PAGE);
         $this->db->bind('offset', ($page - 1) * LIMIT_PAGE);
-        
+
         $result = $this->db->resultSet();
         return $result;
     }
@@ -46,16 +49,18 @@ class Movie {
 
         if ($category !== "none") {
             $sql .= " AND c.name = :category";
-        } 
+        }
         if ($year != "none") {
             $sql .= " AND m.year = :year";
         }
         $sql .= " ORDER BY $sort LIMIT :limit OFFSET :offset";
-        
+
 
         $this->db->query($sql);
 
-        if ($name === '~all') { $name = ''; }
+        if ($name === '~all') {
+            $name = '';
+        }
 
         $this->db->bind('name', "%$name%");
         if ($category !== 'none') {
@@ -67,21 +72,38 @@ class Movie {
         // $this->db->bind('sortby', $sort);
         $this->db->bind('limit', LIMIT_PAGE);
         $this->db->bind('offset', ($page - 1) * LIMIT_PAGE);
-        
+
         $result = $this->db->resultSet();
-        
+
         return $result;
     }
 
-    public function getCountAll() {
+    public function getInIds($ids)
+    {
+        $ids = implode(',', $ids);
+        $sql = "SELECT * FROM movie WHERE movie_id IN ($ids)";
+        $this->db->query($sql);
+        return $this->db->resultSet();
+    }
+
+    public function getNotInIds($ids)
+    {
+        $ids = implode(',', $ids);
+        $sql = "SELECT * FROM movie WHERE movie_id NOT IN ($ids)";
+        $this->db->query($sql);
+        return $this->db->resultSet();
+    }
+
+    public function getCountAll()
+    {
         $sql = "SELECT COUNT(*) count from movie";
         $this->db->query($sql);
-        
+
         $count = $this->db->single();
-        return ceil($count['count']/LIMIT_PAGE);
+        return ceil($count['count'] / LIMIT_PAGE);
     }
-    
-    public function getCountPage($name, $category = "none", $year = "none") 
+
+    public function getCountPage($name, $category = "none", $year = "none")
     {
         $sql = "SELECT COUNT(*) count from (SELECT DISTINCT m.movie_id
             FROM movie AS m INNER JOIN movie_director AS md ON m.movie_id = md.movie_id
@@ -94,7 +116,7 @@ class Movie {
 
         if ($category !== "none") {
             $sql .= " AND c.name = :category";
-        } 
+        }
         if ($year !== "none") {
             $sql .= " AND m.year = :year";
         }
@@ -102,7 +124,9 @@ class Movie {
 
         $this->db->query($sql);
 
-        if ($name === '~all') { $name = ''; }
+        if ($name === '~all') {
+            $name = '';
+        }
 
         $this->db->bind('name', "%$name%");
         if ($category !== 'none') {
@@ -112,15 +136,16 @@ class Movie {
             $this->db->bind('year', $year);
         }
         $count = $this->db->single();
-        return ceil($count['count']/LIMIT_PAGE);
+        return ceil($count['count'] / LIMIT_PAGE);
     }
 
-    public function getYear() {
+    public function getYear()
+    {
         $sql = 'SELECT DISTINCT year FROM movie ORDER BY year';
 
         $this->db->query($sql);
         return $this->db->resultSet();
-    } 
+    }
 
     public function getMovieByID($id)
     {
@@ -196,10 +221,10 @@ class Movie {
         $rowCount += $this->db->rowCount();
 
         $movieID = $this->db->lastInsertID();
-        
+
         // add movie_actor
         $sql = "INSERT INTO movie_actor(movie_id, actor_id) VALUES (:movie_id, :actor_id)";
-        
+
         foreach ($data['actors'] as $idx => $actorID) {
             $this->db->query($sql);
             $this->db->bind("movie_id", $movieID);
@@ -212,7 +237,7 @@ class Movie {
 
         // add movie_director
         $sql = "INSERT INTO movie_director(movie_id, director_id) VALUES (:movie_id, :director_id)";
-        
+
         foreach ($data['directors'] as $idx => $directorID) {
             $this->db->query($sql);
             $this->db->bind("movie_id", $movieID);
@@ -235,11 +260,11 @@ class Movie {
 
         if ($photo_name) {
             $query .= " m.img_path = :img_path , ";
-        } 
+        }
 
         if ($video_name) {
             $query .= " m.trailer_path = :trailer_path , ";
-        } 
+        }
 
         $query .= " m.title = :title , m.description = :description , m.year = :year , m.duration = :duration WHERE m.movie_id = :movie_id";
 
@@ -258,19 +283,19 @@ class Movie {
         }
 
         $this->db->execute();
-        
+
         $rowCount += $this->db->rowCount();
-        
+
         $movieID = $this->db->lastInsertID();
-        
+
         // add movie_actor
         $sql = "DELETE FROM movie_actor ma WHERE ma.movie_id = :movie_id";
         $this->db->query($sql);
         $this->db->bind("movie_id", $data['movie_id']);
         $this->db->execute();
-        
+
         $sql = "INSERT INTO movie_actor(movie_id, actor_id) VALUES (:movie_id, :actor_id)";
-        
+
         foreach ($data['actors'] as $idx => $actorID) {
             $this->db->query($sql);
             $this->db->bind("movie_id", $data['movie_id']);
@@ -288,7 +313,7 @@ class Movie {
         $this->db->execute();
 
         $sql = "INSERT INTO movie_director(movie_id, director_id) VALUES (:movie_id, :director_id)";
-        
+
         foreach ($data['directors'] as $idx => $directorID) {
             $this->db->query($sql);
             $this->db->bind("movie_id", $data['movie_id']);
@@ -302,7 +327,8 @@ class Movie {
         return $rowCount;
     }
 
-    public function deleteMovie($movieID) {
+    public function deleteMovie($movieID)
+    {
         $sql = "DELETE FROM movie m WHERE m.movie_id = :movie_id";
 
         $this->db->query($sql);
@@ -346,7 +372,8 @@ class Movie {
     //     return $this->db->rowCount();
     // }
 
-    public function uploadMovieImg() {
+    public function uploadMovieImg()
+    {
         $fileName = $_FILES['imageInput']['name'];
         $fileTmp = $_FILES['imageInput']['tmp_name'];
 
@@ -368,7 +395,8 @@ class Movie {
         return $pictureName;
     }
 
-    public function uploadMovieTrailer() {
+    public function uploadMovieTrailer()
+    {
         $fileName = $_FILES['trailerInput']['name'];
         $fileSize = $_FILES['trailerInput']['size'];
         $fileTmp = $_FILES['trailerInput']['tmp_name'];
@@ -398,23 +426,25 @@ class Movie {
         return $videoName;
     }
 
-    public function getMovieByStudio($studio_id, $page = 1) {
+    public function getMovieByStudio($studio_id, $page = 1)
+    {
         // echo $studio_id;
         $sql = "SELECT * FROM movie WHERE studio_id = :studio_id LIMIT :limit OFFSET :offset";
         $this->db->query($sql);
         $this->db->bind("studio_id", (int) $studio_id);
         $this->db->bind('limit', 5);
         $this->db->bind('offset', ($page - 1) * 5);
-        
+
         return $this->db->resultSet();
     }
-    public function getPageMovieByStudio($studio_id) {
+    public function getPageMovieByStudio($studio_id)
+    {
         // echo $studio_id;
         $sql = "SELECT COUNT(*) count FROM movie WHERE studio_id = :studio_id ";
         $this->db->query($sql);
         $this->db->bind("studio_id", (int) $studio_id);
-        
+
         $count = $this->db->single();
-        return ceil($count['count']/5);
+        return ceil($count['count'] / 5);
     }
 }

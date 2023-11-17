@@ -2,20 +2,21 @@
 
 class MovieController
 {
-    public function index() {
+    public function index()
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
                     $auth = Utils::middleware("Authentication");
                     $auth->isUserLogin();
                     $data['isLogin'] = true;
-                    
-                    $isAdmin = false; 
+
+                    $isAdmin = false;
                     try {
                         $auth->isAdminLogin();
                         $isAdmin = true;
                     } catch (Exception $e) {
-                        if ($e-> getCode() !== STATUS_UNAUTHORIZED) {
+                        if ($e->getCode() !== STATUS_UNAUTHORIZED) {
                             throw new Exception($e->getMessage(), $e->getCode());
                         }
                     }
@@ -50,7 +51,8 @@ class MovieController
         }
     }
 
-    public function search() {
+    public function search()
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
@@ -73,7 +75,7 @@ class MovieController
 
 
                     $searchView = Utils::view("search", "SearchView", $data);
-                    $searchView->render();                    
+                    $searchView->render();
                     break;
                 default:
                     throw new Exception('Method Not Allowed', STATUS_METHOD_NOT_ALLOWED);
@@ -87,7 +89,8 @@ class MovieController
         }
     }
 
-    public function fetch($page) {
+    public function fetch($page)
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
@@ -95,8 +98,8 @@ class MovieController
                     $auth->isUserLogin();
                     $data['isLogin'] = true;
                     $movieModel = Utils::model("Movie");
-                    
-                    $movies = $movieModel->getByArgs($_GET['q'], $_GET['sort'], $_GET['category'], $_GET['year'],$page);
+
+                    $movies = $movieModel->getByArgs($_GET['q'], $_GET['sort'], $_GET['category'], $_GET['year'], $page);
                     $count = $movieModel->getCountPage($_GET['q'], $_GET['category']);
 
                     header('Content-Type: application/json');
@@ -119,17 +122,28 @@ class MovieController
 
 
     // need refactor
-    public function getAllMovies($page) {
+    public function ids()
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
                     $movieModel = Utils::model("Movie");
-                    
-                    $movies = $movieModel->getPaginate($page);
-                    $count = $movieModel->getCountAll();
+                    $ids = $_GET['ids'] ?? "";
+                    if ($ids) {
+                        $ids = explode(',', $ids);
+                        // check if all ids are numeric
+                        foreach ($ids as $id) {
+                            if (!is_numeric($id)) {
+                                throw new Exception('Bad Request', 400);
+                            }
+                        }
+                        $movies = $movieModel->getInIds($ids);
+                    } else {
+                        throw new Exception('Bad Request', 400);
+                    }
 
                     header('Content-Type: application/json');
-                    echo json_encode(['movies' => $movies, 'page' => $count]);
+                    echo json_encode(['movies' => $movies]);
                     exit;
                     break;
                 default:
@@ -140,20 +154,53 @@ class MovieController
         }
     }
 
-    public function catalog() {
+    public function notIds()
+    {
+        try {
+            switch ($_SERVER['REQUEST_METHOD']) {
+                case 'GET':
+                    $movieModel = Utils::model("Movie");
+                    $ids = $_GET['ids'] ?? "";
+                    if ($ids) {
+                        $ids = explode(',', $ids);
+                        // check if all ids are numeric
+                        foreach ($ids as $id) {
+                            if (!is_numeric($id)) {
+                                throw new Exception('Bad Request', 400);
+                            }
+                        }
+                        $movies = $movieModel->getNotInIds($ids);
+                    } else {
+                        $movies = $movieModel->getAllMovies();
+                    }
+
+                    header('Content-Type: application/json');
+                    echo json_encode(['movies' => $movies]);
+                    exit;
+                    break;
+                default:
+                    throw new Exception('Method Not Allowed', STATUS_METHOD_NOT_ALLOWED);
+            }
+        } catch (Exception $e) {
+            http_response_code($e->getCode());
+        }
+    }
+
+    public function catalog()
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
                     $auth = Utils::middleware("Authentication");
                     $auth->isUserLogin();
                     $data['isLogin'] = true;
-                    
-                    $isAdmin = false; 
+
+                    $isAdmin = false;
                     try {
                         $auth->isAdminLogin();
                         $isAdmin = true;
                     } catch (Exception $e) {
-                        if ($e-> getCode() !== STATUS_UNAUTHORIZED) {
+                        if ($e->getCode() !== STATUS_UNAUTHORIZED) {
                             throw new Exception($e->getMessage(), $e->getCode());
                         }
                     }
@@ -164,7 +211,7 @@ class MovieController
                     $data["datatype"] = "movies";
 
                     $movieView = Utils::view("lists", "MovieListView", $data);
-                    
+
                     $movieView->render();
                     break;
                 default:
@@ -181,7 +228,8 @@ class MovieController
         }
     }
 
-    public function insert() {
+    public function insert()
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
@@ -192,7 +240,7 @@ class MovieController
                     $movieModel = Utils::model('Movie');
                     $data["movies"] = $movieModel->getAllMovies();
                     $data["datatype"] = "movies";
-                    
+
                     $actorModel = Utils::model('Actor');
                     $data["actors"] = $actorModel->getAllActor();
 
@@ -217,27 +265,26 @@ class MovieController
                         if ($poster["error"] == UPLOAD_ERR_OK && $trailer["error"] == UPLOAD_ERR_OK) {
                             $uploadPosterDir = "media/img/movie";
                             $posterName = basename($poster["name"]);
-                            $uploadPoster = $uploadPosterDir .'/'. $posterName;
+                            $uploadPoster = $uploadPosterDir . '/' . $posterName;
                             // var_dump($uploadPoster);
 
                             $uploadTrailerDir = "media/img/trailer";
                             $trailerName = basename($trailer["name"]);
-                            $uploadTrailer = $uploadTrailerDir .'/'. $trailerName;
+                            $uploadTrailer = $uploadTrailerDir . '/' . $trailerName;
                             // var_dump($uploadPoster);
-                
+
                             if (move_uploaded_file($poster["tmp_name"], $uploadPoster) && move_uploaded_file($trailer["tmp_name"], $uploadTrailer)) {
                                 // echo "File is valid and was successfully uploaded.";
 
                                 // Add mvooe
-                                if ($movieModel -> addMovie($_POST, $posterName, $trailerName) > 0){
+                                if ($movieModel->addMovie($_POST, $posterName, $trailerName) > 0) {
                                     // var_dump($_POST);
                                     header('Content-Type: application/json');
                                     http_response_code(STATUS_OK);
-                                    echo json_encode(['error' => null ]);
+                                    echo json_encode(['error' => null]);
                                     break;
                                     exit;
                                 }
-
                             } else {
                                 echo "Error uploading the file.";
                             }
@@ -260,7 +307,8 @@ class MovieController
         }
     }
 
-    public function update() {
+    public function update()
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
@@ -274,7 +322,7 @@ class MovieController
                     $data["movie"] = $movieModel->getMovieByID($_GET['movie_id']);
 
                     $movie_actor = $movieModel->getActorByMovieID($_GET['movie_id']);
-                    $movie_director= $movieModel->getDirectorByMovieID($_GET['movie_id']);
+                    $movie_director = $movieModel->getDirectorByMovieID($_GET['movie_id']);
 
                     $actorModel = Utils::model('Actor');
                     $data["actors"] = $actorModel->getAllActor();
@@ -296,14 +344,14 @@ class MovieController
                     $posterName = "";
                     $trailerName = "";
 
-                    if (isset($_FILES['poster'])){
+                    if (isset($_FILES['poster'])) {
                         $poster = $_FILES["poster"];
                         if ($poster["error"] == UPLOAD_ERR_OK) {
                             $uploadPosterDir = "media/img/movie";
                             $posterName = basename($poster["name"]);
-                            $uploadPoster = $uploadPosterDir .'/'. $posterName;
+                            $uploadPoster = $uploadPosterDir . '/' . $posterName;
 
-                            if (!move_uploaded_file($poster["tmp_name"], $uploadPoster)){
+                            if (!move_uploaded_file($poster["tmp_name"], $uploadPoster)) {
                                 throw new Exception('Internal Server Error', STATUS_INTERNAL_SERVER_ERROR);
                             }
                         } else {
@@ -311,14 +359,14 @@ class MovieController
                         }
                     }
 
-                    if (isset($_FILES['trailer'])){
+                    if (isset($_FILES['trailer'])) {
                         $trailer = $_FILES["trailer"];
                         if ($trailer["error"] == UPLOAD_ERR_OK) {
                             $uploadTrailerDir = "media/img/movie";
                             $trailerName = basename($trailer["name"]);
-                            $uploadTrailer = $uploadTrailerDir .'/'. $trailerName;
+                            $uploadTrailer = $uploadTrailerDir . '/' . $trailerName;
 
-                            if (!move_uploaded_file($trailer["tmp_name"], $uploadTrailer)){
+                            if (!move_uploaded_file($trailer["tmp_name"], $uploadTrailer)) {
                                 throw new Exception('Internal Server Error', STATUS_INTERNAL_SERVER_ERROR);
                             }
                         } else {
@@ -327,11 +375,11 @@ class MovieController
                     }
 
                     // Add mvooe
-                    if ($movieModel->updateMovie($_POST, $posterName, $trailerName) > 0){
+                    if ($movieModel->updateMovie($_POST, $posterName, $trailerName) > 0) {
                         // var_dump($_POST);
                         header('Content-Type: application/json');
                         http_response_code(STATUS_OK);
-                        echo json_encode(['error' => null ]);
+                        echo json_encode(['error' => null]);
                         break;
                         exit;
                     }
@@ -349,7 +397,8 @@ class MovieController
         }
     }
 
-    public function delete() {
+    public function delete()
+    {
         try {
             // var_dump($_SERVER['REQUEST_METHOD']);
             switch ($_SERVER['REQUEST_METHOD']) {
@@ -359,11 +408,11 @@ class MovieController
                     $data['isLogin'] = true;
 
                     $movieModel = Utils::model('Movie');
-                    if ($movieModel->deleteMovie($_GET['movie_id']) > 0){
+                    if ($movieModel->deleteMovie($_GET['movie_id']) > 0) {
                         // var_dump($_POST);
                         // header('Location: ' ."http://$_SERVER[HTTP_HOST]".  '/movie/catalog');
                         header('Content-Type: application/json');
-                        echo json_encode(['error' => null ]);
+                        echo json_encode(['error' => null]);
                     }
                     exit;
                     break;
@@ -380,21 +429,22 @@ class MovieController
             http_response_code($e->getCode());
         }
     }
-    
 
-    public function detail($movieID) {
+
+    public function detail($movieID)
+    {
         try {
             switch ($_SERVER['REQUEST_METHOD']) {
                 case 'GET':
                     $auth = Utils::middleware("Authentication");
                     $auth->isUserLogin();
-                    
-                    $isAdmin = false; 
+
+                    $isAdmin = false;
                     try {
                         $auth->isAdminLogin();
                         $isAdmin = true;
                     } catch (Exception $e) {
-                        if ($e-> getCode() !== STATUS_UNAUTHORIZED) {
+                        if ($e->getCode() !== STATUS_UNAUTHORIZED) {
                             throw new Exception($e->getMessage(), $e->getCode());
                         }
                     }
@@ -403,12 +453,12 @@ class MovieController
                     $data['isLogin'] = true;
 
                     // Admin Checking
-                    $isAdmin = false; 
+                    $isAdmin = false;
                     try {
                         $auth->isAdminLogin();
                         $isAdmin = true;
                     } catch (Exception $e) {
-                        if ($e-> getCode() !== STATUS_UNAUTHORIZED) {
+                        if ($e->getCode() !== STATUS_UNAUTHORIZED) {
                             throw new Exception($e->getMessage(), $e->getCode());
                         }
                     }
@@ -416,37 +466,37 @@ class MovieController
 
                     // $movieChosen = $_GET['title'];
                     $data['movie'] = Utils::model("Movie")->getMovieByID($movieID);
-                    
+
                     // var_dump($_GET);
                     // $movieID = $data['movie']['movie_id'];
-                    
+
                     // TODO: Kayaknya ada yg salah disini
                     $data['directorID'] = Utils::model("Movie")->getDirectorByMovieID($movieID);
                     foreach ($data['directorID'] as $directorID) {
                         $directorID = $directorID['director_id'];
                         $data['director'][] = Utils::model("Director")->getDirectorByID("$directorID");
                     };
-            
+
                     $data['actorID'] = Utils::model("Movie")->getActorByMovieID("$movieID");
                     foreach ($data['actorID'] as $actorID) {
                         $actorID = $actorID['actor_id'];
                         $data['actor'][] = Utils::model("Actor")->getActorByID("$actorID");
                     };
-            
-                  
+
+
                     //pagination for reviews
                     $reviewPerPage = 10;
-                    $data['totalPage'] = ceil(Utils::model("Movie")->getCountReviewByMovieID($movieID)/$reviewPerPage);
+                    $data['totalPage'] = ceil(Utils::model("Movie")->getCountReviewByMovieID($movieID) / $reviewPerPage);
                     $currentPage = $_GET['page'] ?? 1;
                     $data['page'] = $currentPage;
                     $initialReview = ($reviewPerPage * $currentPage) - $reviewPerPage;
-            
+
                     $data['reviewID'] = Utils::model("Movie")->getReviewByMovieIDWithLimit("$movieID", $initialReview, $reviewPerPage);
                     foreach ($data['reviewID'] as $reviewID) {
                         $reviewID = $reviewID['review_id'];
                         $data['reviews'][] = Utils::model("Review")->getReviewByReviewID("$reviewID");
                     };
-            
+
                     $movieView = Utils::view("about", "AboutMovieView", $data);
                     $movieView->render();
                     break;
