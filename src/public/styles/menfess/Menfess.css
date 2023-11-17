@@ -1,0 +1,36 @@
+.menfess-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.menfess-form-container {
+    margin: auto;
+    width: 80%;
+}
+
+.menfess-header {
+    margin-top: 5vh;
+    margin-bottom: 3vh;
+}
+
+.menfess-container-field {
+}
+
+.form-input {
+    max-width: 100%;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.menfess-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 3vh;
+}
